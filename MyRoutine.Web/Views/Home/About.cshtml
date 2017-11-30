@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+<section class="row">
+    <div class="col span_3">&nbsp;</div>
+    <div class="col span_6">
+        <div class="page-title">About</div>
+      
+        <div id="about-content" class="page-content">
+            <p>My Routine is a progress-tracking tool for people learning an instrument. It came about after the <a href="http://www.davidtimovski.com">author</a> decided that he'd had enough of tracking his practice routine using Excel spreadsheets and sought to find a more convenient way. Being a web developer by profession he decided that a web application is the solution.</p>
+            <p>What he learned from other people learning an instrument is that everyone has their own way of tracking their practice routine and progress. Combining the way that he himself tracked his progress and the ways that he learned from other people online he designed a system that's convenient and works for all types of instruments.</p>
+            <p>The system is simple. Separate everything into tasks. A task is basically a type of exercise. The user creates a task for every specific type of exercise they do on their instrument. Like finger warmup, or stretching. Having everything separated like this allows users to regularly track what they have completed during the day with just a few clicks.</p>
+            <p>Since routines usually change, transitioning to a new schedule is made very easy. A user can just archive the tasks they no longer do and create new ones. Archived tasks don't appear in the practice schedule but their info is still kept.</p>
+            <p>Keeping a practice schedule not only allows for progress-tracking but helps with motivation too. But don't take my word for it, go ahead and <a href="/Register">try it out</a>. It's free and it will always be free.</p>
+        </div>
+    </div>
+    <div class="col span_3">&nbsp;</div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("/JS/Home/about.js")"></script>
+}

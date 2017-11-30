@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="row">
+    <div class="col span_12">
+        <div class="logo-wrap">
+            <div class="logo-text"></div>
+            <div class="logo-circle"></div>
+        </div>
+    </div>
+</div>
+
+<section class="row">
+    <div class="col span_12">
+        <form id="login-form" class="initially-hidden" data-bind="submit: submit">
+            <fieldset>
+
+                <div class="form-success initially-hidden" data-bind="text: formSuccessText"></div>
+                <ul class="validation-errors initially-hidden"></ul>
+
+                <ol>
+                    <li>
+                        <input type="email" id="Email" name="Email" class="text-center" maxlength="320" tabindex="1" placeholder="Email" data-bind="value: email" autofocus required />
+                    </li>
+                    <li>
+                        <input type="password" id="Password" name="Password" class="text-center" maxlength="100" tabindex="2" placeholder="Password" data-bind="value: password" required />
+                    </li>
+                </ol>
+            </fieldset>
+            
+            <div class="login-buttons-wrap">
+                <input type="submit" value="Login" class="button" />
+
+                <label for="RememberMe" class="remember-me-label" data-bind="text: rememberMeLabelText, css: { checked: rememberMe }">Remember me?</label>
+                <input type="checkbox" id="RememberMe" name="RememberMe" class="hide" data-bind="checked: rememberMe" />
+            </div>
+            
+            <ul class="other-links">
+                <li>
+                    <a href="/ForgotPassword" title="Forgot your password?">Forgot your password?</a>
+                </li>
+                <li>
+                    <a href="/Register" title="Register">Register</a> if you don't have an account.
+                </li>
+            </ul>
+        </form>
+        
+        <div id="demo-alert">
+            <i class="icon-times close" aria-hidden="true" data-bind="click: closeDemoAlert"></i>
+            <div class="demo-title">
+                <i class="icon-car distanced" aria-hidden="true"></i>Take it for a test drive!
+            </div>
+            <div class="demo-explanation">
+                Feel free to register and explore the site.
+                <br>
+                If registering feels like too much of a hassle use one of these demo accounts:
+            </div>
+            <div data-bind="foreach: { data: demoUserAccounts, as: 'user' }">
+                <div class="user">
+                    <div class="credentials" data-bind="click: $root.setDemoLoginCredentials"><span data-bind="text: user.email"></span> - <span data-bind="text: user.password"></span></div>
+                    <div data-bind="text: user.description"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        var returnUrl = '@ViewBag.ReturnUrl';
+        var justRegistered = '@ViewBag.JustRegistered';
+        var accountDeleted = '@ViewBag.AccountDeleted';
+    </script>
+    <script src="@Url.Content("/JS/Home/index.js")"></script>
+}

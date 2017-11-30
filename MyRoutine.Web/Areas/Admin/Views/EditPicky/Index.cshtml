@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "Edit Picky";
+}
+
+<section id="form-wrap" class="row initially-hidden" data-bind="visible: formIsShown">
+    <div class="col span_4">&nbsp;</div>
+    <div class="col span_4">
+        <form id="edit-picky-message-form" data-bind="submit: submit">
+            <input type="hidden" id="Id" name="Id" data-bind="value: selectedMessage().id" />
+            <input type="hidden" id="Type" name="Type" data-bind="value: selectedMessage().type" />
+            <fieldset>
+                <legend class="small" data-bind="text: formTitle()">New Message</legend>
+                <ol>
+                    <li>
+                        <div class="input-group">
+                            <span class="addon">Type:</span>
+                            <select id="Type" name="Type" data-bind="value: selectedMessage().type, options: pickyMessageTypeSelectOptions, optionsText: 'text', optionsValue: 'value'" tabindex="1" required></select>
+                        </div>
+                    </li>
+                    <li>
+                        <textarea id="Message" name="Message" maxlength="200" placeholder="Message. Use the #USER# macro to refer to the user's name." data-bind="value: selectedMessage().message" tabindex="2"></textarea>
+                    </li>
+                </ol>
+                <div class="submit-wrap">
+                    <input type="submit" class="button" value="Save" tabindex="3" />
+                    <button type="button" class="button" data-bind="click: hideForm" tabindex="4">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col span_4">&nbsp;</div>
+</section>
+
+<section class="row">
+    <div class="col span_2">&nbsp;</div>
+    <div class="col span_8">
+        <div class="table-title">Picky Messages</div>
+        
+        <div class="table-top-actions">
+            <div class="row">
+                <div class="col span_8">
+                    <div class="row gutters search">
+                        <div class="col span_5">
+                            <input type="text" placeholder="Search by Message" data-bind="value: gridFilters().search" />
+                        </div>
+                        <div class="col span_5">
+                            <select class="optional" data-bind="value: gridFilters().searchEnum, options: pickyMessageTypeSelectOptions, optionsCaption: 'Search by Type', optionsText: 'text', optionsValue: 'value', css: { 'selected': gridFilters().searchEnum() !== undefined }"></select>
+                        </div>
+                        <div class="col span_2 no-wrap">
+                            <button type="button" class="button" title="Search" data-bind="click: function () { gridFilters().first(); getMessages(); }"><i class="icon-search" aria-hidden="true"></i></button>
+                            <button type="button" class="button" data-bind="click: function() { gridFilters().reset(); getMessages(); }">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col span_4 text-right">
+                    <button type="button" class="button" data-bind="click: newMessage"><i class="icon-plus-circle distanced" aria-hidden="true"></i>New</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive-wrap">
+            <table id="picky-messages-table" class="table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: messages">
+                    <tr>
+                        <td data-bind="text: typeText"></td>
+                        <td data-bind="text: trimmedMessage"></td>
+                        <td>
+                            <button type="button" class="button" data-bind="click: $root.editMessage">
+                                <i class="distanced" data-bind="css: { 'icon-pencil-square-o': $root.selectedMessage().id() !== id(), 'icon-ban': $root.selectedMessage().id() === id() }" aria-hidden="true"></i><span data-bind="text: $root.selectedMessage().id() !== id() ? 'Edit' : 'Cancel'"></span>
+                            </button>
+                            <button type="button" class="button" data-bind="click: $root.deleteMessage"><i class="icon-trash distanced" aria-hidden="true"></i>Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="empty-table" data-bind="visible: messages().length === 0">
+                    <tr>
+                        <td colspan="3">There doesn't seem to be anything here</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination" data-bind="visible: messages().length > 0">
+                <a href="#" class="button" data-bind="click: function() { gridFilters().first(); getMessages(); }, visible: gridFilters().hasPreviousAndFirst">First</a>
+                <a href="#" class="button previous" data-bind="click: function() { gridFilters().previous(); getMessages(); }, visible: gridFilters().hasPreviousAndFirst"><i class="icon-chevron-left" aria-hidden="true"></i></a>
+                <span data-bind="foreach: gridFilters().visiblePageNumbers()">
+                    <!-- ko if: isCurrent() -->
+                    <span class="button current" data-bind="text: number"></span>
+                    <!-- /ko -->
+                    <!-- ko if: isCurrent() === false -->
+                    <span class="button" data-bind="text: number, click: function () { $root.gridFilters().setPage(number()); $root.getMessages(); }"></span>
+                    <!-- /ko -->
+                </span>
+                <a href="#" class="button next" data-bind="click: function() { gridFilters().next(); getMessages(); }, visible: gridFilters().hasNextAndLast"><i class="icon-chevron-right" aria-hidden="true"></i></a>
+                <a href="#" class="button" data-bind="click: function() { gridFilters().last(); getMessages(); }, visible: gridFilters().hasNextAndLast">Last</a>
+                <span class="item-count"><span data-bind="text: gridFilters().pageItemsFrom"></span> to <span data-bind="text: gridFilters().pageItemsTo"></span> out of <span data-bind="text: gridFilters().itemCount"></span> messages</span>
+            </div>
+        </div>
+    </div>
+    <div class="col span_2">&nbsp;</div>
+</section>
+
+@section Scripts {
+    <script>
+        var pickyMessageTypeSelectOptions = JSON.parse('@Html.Raw(ViewBag.PickyMessageTypeSelectOptions)');
+    </script>
+    <script src="@Url.Content("/JS/gridfiltersviewmodel.js")"></script>
+    <script src="@Url.Content("/Areas/Admin/JS/EditPicky/index.js")"></script>
+}

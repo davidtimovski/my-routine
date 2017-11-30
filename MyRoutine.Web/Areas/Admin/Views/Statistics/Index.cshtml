@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Statistics";
+}
+
+<section class="row">
+    <div class="col span_12 statistics">
+        <div class="text-center"><a href="#user-registrations-monthly-chart"><i class="icon-users distanced" aria-hidden="true"></i></a>User registrations today: <span data-bind="text: userRegistrationsToday"></span></div>
+        <div class="text-center"><a href="#tasks-created-monthly-chart"><i class="icon-list distanced" aria-hidden="true"></i></a>Tasks created today: <span data-bind="text: tasksCreatedToday"></span></div>
+        <div class="text-center"><a href="#tasks-completed-monthly-chart"><i class="icon-tasks distanced" aria-hidden="true"></i></a>Tasks completed today: <span data-bind="text: tasksCompletedToday"></span></div>
+    </div>
+</section>
+
+<section class="statistics-charts">
+    <div class="row">
+        <div class="col span_2">&nbsp;</div>
+        <div class="col span_8">
+            <div id="user-registrations-monthly-chart"></div>
+        </div>
+        <div class="col span_2">&nbsp;</div>
+    </div>
+
+    <div class="row">
+        <div class="col span_2">&nbsp;</div>
+        <div class="col span_8">
+            <div id="tasks-created-monthly-chart"></div>
+        </div>
+        <div class="col span_2">&nbsp;</div>
+    </div>
+
+    <div class="row">
+        <div class="col span_2">&nbsp;</div>
+        <div class="col span_8">
+            <div id="tasks-completed-monthly-chart"></div>
+        </div>
+        <div class="col span_2">&nbsp;</div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("/Scripts/highcharts/4.2.0/highcharts.js")"></script>
+    <script src="@Url.Content("/Areas/Admin/JS/Statistics/index.js")"></script>
+}

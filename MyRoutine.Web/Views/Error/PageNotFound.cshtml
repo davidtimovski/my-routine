@@ -1,0 +1,30 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Not found";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Not Found</title>
+    <link href="~/Content/images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"> <!-- Lato (font) -->
+    @Styles.Render("~/Content/styles")
+</head>
+<body>
+    <div id="body">
+        <section class="row">
+            <div class="col span_12">
+                <div class="not-found-title text-center">404</div>
+                <div class="not-found-subtitle text-center">Sorry, what you're looking for isn't here.</div>
+                <div class="text-center"><a href="/">Well then get me outta here!</a></div>
+            </div>
+        </section>
+    </div>
+    <footer>
+        Copyright &copy; <span id="copyright-year"></span> My Routine
+    </footer>
+</body>
+</html>

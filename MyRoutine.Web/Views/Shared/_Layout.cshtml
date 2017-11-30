@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - My Routine</title>
+        <meta name="description" content="Your personal instrument-practice progress tracker">
+        <link href="~/Content/images/favicon.png" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width"/>
+        <meta name="google-site-verification" content="17RRbP81BHFtIxOvAMrm87BdWATSWAQ3kIcwKzW9ZCw" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css"> <!-- Lato (font) -->
+        @Styles.Render("/Content/styles")
+        <script src="@Url.Content("/JS/cookie-consent.js")"></script>
+    </head>
+    <body>
+        <div id="wrap">
+            <header>
+                <i class="icon-refresh header-loading" aria-hidden="true"></i>
+                @Html.Partial("_LoginPartial")
+            </header>
+            <main id="content">
+                <div id="message-mobile">
+                    <div class="content"></div>
+                    <div class="confirm">
+                        <button type="button" class="button yes">Yeah</button>
+                        <button type="button" class="button no">Nope</button>
+                    </div>
+                    <div class="dismiss">
+                        <button type="button" class="button"></button>
+                    </div>
+                </div>
+                @RenderBody()
+            </main>
+            <footer>
+                Copyright &copy; @DateTime.Now.Year My Routine
+            </footer>
+            <div id="mobile-loading"><i class="icon-refresh" aria-hidden="true"></i></div>
+        </div>
+
+        @Scripts.Render("/Scripts/global")
+
+        @if (WebSecurity.IsAuthenticated)
+        {
+            @Scripts.Render("/JS/picky")
+        }
+        <script>
+            app.global();
+        </script>
+        @RenderSection("scripts", false)
+    </body>
+</html>

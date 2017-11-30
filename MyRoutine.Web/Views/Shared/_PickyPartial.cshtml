@@ -1,0 +1,23 @@
+﻿@using MyRoutine.Service
+
+<div id="picky-wrap">
+    <input type="hidden" id="picky-has-introduced-itself" value="@Html.Raw(UserSessionData.HasBeenIntroducedToPicky)" />
+    <input type="hidden" id="picky-has-greeted-user" value="@Html.Raw(UserSessionData.HasBeenGreetedByPicky)" />
+    <input type="hidden" id="no-login-in-a-while" value="@Html.Raw(UserSessionData.NoLoginInAWhile)" />
+    <i class="icon-refresh loading" aria-hidden="true"></i>
+    <div id="picky" title="Go away">
+        <div class="left-eye"></div>
+        <div class="right-eye"></div>
+        <div class="mouth"></div>
+    </div>
+    <div id="message">
+        <div class="content"></div>
+        <div class="confirm">
+            <button type="button" class="button yes">Yeah</button>
+            <button type="button" class="button no">Nope</button>
+        </div>
+        <div class="dismiss">
+            <button type="button" class="button"></button>
+        </div>
+    </div>
+</div>

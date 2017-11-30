@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Overview";
+}
+
+<section class="row">
+    <div class="col span_12">
+        <div class="schedule-wrap initially-hidden" data-bind="visible: tasks().length > 0">
+            <div class="schedule-header">
+                <div class="schedule-buttons">
+                    <button type="button" class="icon-floppy-o button" title="Save changes" data-bind="attr: { disabled: changedTaskItems().length === 0 }, click: saveSchedule"></button>
+                    <button type="button" class="icon-ban button cancel" title="Cancel changes" data-bind="attr: { disabled: changedTaskItems().length === 0 }, click: cancelChangesToSchedule"></button>
+                    <button type="button" class="icon-history button" data-bind="visible: showPreviousButtonIsVisible, click: showPreviousMonth" title="Show previous month"></button>
+                    <label for="layout-toggle" class="button layout-toggle" data-bind="attr: { title: scheduleLayoutToggleTitle }, css: { 'icon-expand': scheduleIsCompact, 'icon-compress': scheduleIsCompact() === false }"></label><input type="checkbox" id="layout-toggle" class="hide" data-bind="checked: scheduleIsCompact" />
+                </div>
+                <div class="schedule-charts">
+                    <label for="minutes-chart-toggle" class="icon-line-chart button chart-toggle-button minutes-chart-toggle" data-bind="attr: { title: minutesChartToggleTitle }, css: { 'is-shown': minutesChartIsShown }"></label><input type="checkbox" id="minutes-chart-toggle" class="hide" data-bind="checked: minutesChartIsShown" />
+                    <label for="minutes-per-task-chart-toggle" class="icon-line-chart button chart-toggle-button minutes-per-task-chart-toggle" data-bind="attr: { title: minutesPerTaskChartToggleTitle }, css: { 'is-shown': minutesPerTaskChartIsShown }"></label><input type="checkbox" id="minutes-per-task-chart-toggle" class="hide" data-bind="checked: minutesPerTaskChartIsShown" />
+                    <label for="repetitions-per-task-chart-toggle" class="icon-line-chart button chart-toggle-button repetitions-per-task-chart-toggle" data-bind="attr: { title: repetitionsPerTaskChartToggleTitle }, css: { 'is-shown': repetitionsPerTaskChartIsShown }"></label><input type="checkbox" id="repetitions-per-task-chart-toggle" class="hide" data-bind="checked: repetitionsPerTaskChartIsShown" />
+                </div>
+            </div>
+            <div class="table-responsive-wrap">
+                <table id="schedule" data-bind="css: { compact: scheduleIsCompact }">
+                    <tbody data-bind="foreach: { data: scheduleDays, as: 'scheduleDay' }">
+                        <tr data-bind="css: { 'start-of-month': isStartOfMonth }">
+                            <td data-bind="text: scheduleDay.dateFormatted"></td>
+                            <!-- ko foreach: scheduleDay.taskItems -->
+                            <td>
+                                <div class="task-item" data-bind="css: { completed: isCompleted, pending: fieldsAreVisible, 'has-duration': durationMinutes(), 'has-repetitions': repetitions() }, css2: taskThemeName">
+                                    <span class="title" data-bind="text: taskTitle, click: toggleIsCompleted"></span>
+                                    <span class="short-title" data-bind="text: taskShortTitle, attr: { title: taskTitle }, click: toggleIsCompleted"></span>
+                                    <span class="inputs">
+                                        <input type="text" class="duration-input" maxlength="3" placeholder="D" data-bind="value: durationMinutes" />
+                                        <input type="text" class="repetitions-input" maxlength="3" placeholder="R" data-bind="value: repetitions" />
+                                    </span>
+                                    <span class="tooltips">
+                                        <span class="duration-tooltip icon-clock-o" data-bind="attr: { title: durationTooltip() }"></span>
+                                        <span class="repetitions-tooltip icon-repeat" data-bind="attr: { title: repetitionsTooltip() }"></span>
+                                    </span>
+                                </div>
+                            </td>
+                            <!-- /ko -->
+                            <td>
+                                <!-- ko if: scheduleDay.allTaskItemsAreCompleted() === false -->
+                                <button type="button" class="check-all" title="Check all" data-bind="click: scheduleDay.markAllTaskItemsAsCompleted"><i class="icon-check" aria-hidden="true"></i></button>
+                                <!-- /ko -->
+                                <!-- ko if: scheduleDay.allTaskItemsAreCompleted() -->
+                                <button type="button" class="uncheck-all" title="Uncheck all" data-bind="click: scheduleDay.markAllTaskItemsAsUncompleted"><i class="icon-times" aria-hidden="true"></i></button>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="schedule-footer">
+                <button type="button" class="button" data-bind="visible: showPreviousButtonIsVisible, click: showPreviousMonth"><i class="icon-history distanced" aria-hidden="true"></i>Show previous month</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="no-tasks-message initially-hidden" data-bind="visible: tasks().length === 0">You don't have any tasks yet. Go on to the <a href="/Tasks">Tasks page</a> and create some.</div>
+
+<section class="charts">
+    <div id="minutes-chart" class="chart hide initially-hidden"></div>
+    <div id="minutes-per-task-chart" class="chart hide initially-hidden"></div>
+    <div id="repetitions-per-task-chart" class="chart hide initially-hidden"></div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("/Scripts/highcharts/4.2.0/highcharts.js")"></script>
+    <script src="@Url.Content("/JS/Overview/index.js")"></script>
+}

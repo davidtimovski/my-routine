@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Users";
+}
+
+<section id="form-wrap" class="row initially-hidden" data-bind="visible: formIsShown">
+    <div class="col span_4">&nbsp;</div>
+    <div class="col span_4">
+        <form id="ban-user-form" data-bind="submit: submit">
+            <input type="hidden" id="Id" name="Id" data-bind="value: selectedUser().id" />
+            <fieldset>
+                <legend class="small">Ban User</legend>
+                <ol>
+                    <li>
+                        <textarea id="BanReason" name="BanReason" maxlength="255" placeholder="Ban reason" data-bind="value: selectedUser().banReason" tabindex="1"></textarea>
+                    </li>
+                </ol>
+                <div class="submit-wrap">
+                    <input type="submit" class="button" value="Ban" tabindex="2" />
+                    <button type="button" class="button" data-bind="click: hideForm" tabindex="3">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col span_4">&nbsp;</div>
+</section>
+
+<section class="row">
+    <div class="col span_2">&nbsp;</div>
+    <div class="col span_8">
+        <div class="table-title">Users</div>
+        
+        <div class="table-top-actions">
+            <div class="row">
+                <div class="col span_8">
+                    <div class="row gutters search">
+                        <div class="col span_5">
+                            <input type="text" placeholder="Search by Name" data-bind="value: gridFilters().search" />
+                        </div>
+                        <div class="col span_5">
+                            <input type="text" placeholder="Search by Email" data-bind="value: gridFilters().searchAdditional" />
+                        </div>
+                        <div class="col span_2 no-wrap">
+                            <button type="button" class="button" title="Search" data-bind="click: function () { gridFilters().first(); getUsers(); }"><i class="icon-search" aria-hidden="true"></i></button>
+                            <button type="button" class="button" data-bind="click: function() { gridFilters().reset(); getUsers(); }">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col span_4">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-responsive-wrap">
+            <table id="users-table" class="table">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-bind="click: function () { gridFilters().setSorting('Email'); getUsers(); }">
+                            Email
+                            <span class="sort-direction" data-bind="css: { 'icon-sort-amount-asc': gridFilters().sortColumn() === 'Email' && gridFilters().sortDirectionIsAscending(), 'icon-sort-amount-desc': gridFilters().sortColumn() === 'Email' && !gridFilters().sortDirectionIsAscending() }"></span>
+                        </th>
+                        <th class="sortable" data-bind="click: function () { gridFilters().setSorting('Name'); getUsers(); }">
+                            Name
+                            <span class="sort-direction" data-bind="css: { 'icon-sort-amount-asc': gridFilters().sortColumn() === 'Name' && gridFilters().sortDirectionIsAscending(), 'icon-sort-amount-desc': gridFilters().sortColumn() === 'Name' && !gridFilters().sortDirectionIsAscending() }"></span>
+                        </th>
+                        <th class="sortable" data-bind="click: function () { gridFilters().setSorting('DateRegistered'); getUsers(); }">
+                            Date Registered
+                            <span class="sort-direction" data-bind="css: { 'icon-sort-amount-asc': gridFilters().sortColumn() === 'DateRegistered' && gridFilters().sortDirectionIsAscending(), 'icon-sort-amount-desc': gridFilters().sortColumn() === 'DateRegistered' && !gridFilters().sortDirectionIsAscending() }"></span>
+                        </th>
+                        <th class="sortable" data-bind="click: function () { gridFilters().setSorting('LastLoginAt'); getUsers(); }">
+                            Last Login At
+                            <span class="sort-direction" data-bind="css: { 'icon-sort-amount-asc': gridFilters().sortColumn() === 'LastLoginAt' && gridFilters().sortDirectionIsAscending(), 'icon-sort-amount-desc': gridFilters().sortColumn() === 'LastLoginAt' && !gridFilters().sortDirectionIsAscending() }"></span>
+                        </th>
+                        <th>Ban Date</th>
+                        <th>Ban Reason</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: users">
+                    <tr data-bind="css: { 'unverified': membershipIsConfirmed() === false, 'banned': isBanned }">
+                        <td data-bind="text: email"></td>
+                        <td data-bind="text: name"></td>
+                        <td data-bind="text: dateRegisteredFormatted"></td>
+                        <td data-bind="text: lastLoginAtFormatted"></td>
+                        <td data-bind="text: banDateFormatted"></td>
+                        <td data-bind="text: banReason"></td>
+                        <td>
+                            <!-- ko if: isBanned() === false -->
+                            <button type="button" class="button" data-bind="click: $root.banUser">
+                                <i class="distanced" data-bind="css: { 'icon-lock': $root.selectedUser().id() !== id(), 'icon-ban': $root.selectedUser().id() === id() }" aria-hidden="true"></i><span data-bind="text: $root.selectedUser().id() !== id() ? 'Ban' : 'Cancel'"></span>
+                            </button>
+                            <!-- /ko -->
+                            <!-- ko if: isBanned() === true -->
+                            <button type="button" class="button" data-bind="click: $root.unbanUser"><i class="icon-check distanced" aria-hidden="true"></i>Unban</button>
+                            <!-- /ko -->
+                            <button type="button" class="button" data-bind="click: $root.deleteUser"><i class="icon-trash distanced" aria-hidden="true"></i>Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="empty-table" data-bind="visible: users().length === 0">
+                    <tr>
+                        <td colspan="8">There doesn't seem to be anything here</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination" data-bind="visible: users().length > 0">
+                <a href="#" class="button" data-bind="click: function() { gridFilters().first(); getUsers(); }, visible: gridFilters().hasPreviousAndFirst">First</a>
+                <a href="#" class="button previous" data-bind="click: function() { gridFilters().previous(); getUsers(); }, visible: gridFilters().hasPreviousAndFirst"><i class="icon-chevron-left" aria-hidden="true"></i></a>
+                <span data-bind="foreach: gridFilters().visiblePageNumbers()">
+                    <!-- ko if: isCurrent() -->
+                    <span class="button current" data-bind="text: number"></span>
+                    <!-- /ko -->
+                    <!-- ko if: isCurrent() === false -->
+                    <span class="button" data-bind="text: number, click: function () { $root.gridFilters().setPage(number()); $root.getUsers(); }"></span>
+                    <!-- /ko -->
+                </span>
+                <a href="#" class="button next" data-bind="click: function() { gridFilters().next(); getUsers(); }, visible: gridFilters().hasNextAndLast"><i class="icon-chevron-right" aria-hidden="true"></i></a>
+                <a href="#" class="button" data-bind="click: function() { gridFilters().last(); getUsers(); }, visible: gridFilters().hasNextAndLast">Last</a>
+                <span class="item-count"><span data-bind="text: gridFilters().pageItemsFrom"></span> to <span data-bind="text: gridFilters().pageItemsTo"></span> out of <span data-bind="text: gridFilters().itemCount"></span> users</span>
+            </div>
+        </div>
+    </div>
+    <div class="col span_2">&nbsp;</div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("/JS/gridfiltersviewmodel.js")"></script>
+    <script src="@Url.Content("/Areas/Admin/JS/Users/index.js")"></script>
+}

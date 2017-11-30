@@ -1,0 +1,26 @@
+﻿@if (WebSecurity.IsAuthenticated)
+{
+    var roles = (SimpleRoleProvider)Roles.Provider;
+
+    <a href="/Overview" class="icon-calendar-check-o @(ViewBag.Title == "Overview" ? "active" : "")" title="Overview"></a>
+    <a href="/Tasks" class="icon-sticky-note @(ViewBag.Title == "Tasks" ? "active" : "")" title="Tasks"></a>
+    if (roles.IsUserInRole(User.Identity.Name, "Admin"))
+    {
+        <a href="/Admin/Statistics" class="icon-bar-chart @(ViewBag.Title == "Statistics" ? "active" : "")" title="Statistics"></a>
+        <a href="/Admin/Users" class="icon-users @(ViewBag.Title == "Users" ? "active" : "")" title="Users"></a>
+        <a href="/Admin/EditPicky" class="icon-commenting @(ViewBag.Title == "Edit Picky" ? "active" : "")" title="Edit Picky"></a>
+    }
+
+    <span id="login-box">
+        <a href="/Profile" class="icon-user @(ViewBag.Title == "Profile" ? "active" : "")" title="Profile"></a>
+        <a href="javascript:;" id="logout-button" class="icon-sign-out" title="Log Out"></a>
+    </span>
+
+    @Html.Partial("_PickyPartial")
+}
+else
+{
+    <a href="/" class="@(ViewBag.Title == "Home" ? "active" : "")" title="Home">Home</a>
+    <a href="/Register" class="@(ViewBag.Title == "Register" ? "active" : "")" title="Register">Register</a>
+    <a href="/About" class="@(ViewBag.Title == "About" ? "active" : "")" title="About">About</a>
+}

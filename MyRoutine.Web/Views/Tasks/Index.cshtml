@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Tasks";
+}
+
+<section id="form-wrap" class="row initially-hidden" data-bind="visible: formIsShown">
+    <div class="col span_4">&nbsp;</div>
+    <div class="col span_4">
+        <form id="edit-task-form" data-bind="submit: submit">
+            <input type="hidden" id="Id" name="Id" data-bind="value: selectedTask().id" />
+            <fieldset>
+                <legend class="small" data-bind="text: formTitle()">New Task</legend>
+                <ol>
+                    <li>
+                        <input type="text" id="Title" name="Title" class="large" maxlength="50" placeholder="Title" data-bind="value: selectedTask().title, event: { blur: generateShortTitle }" tabindex="1" required />
+                    </li>
+                    <li>
+                        <div class="input-group">
+                            <input type="text" id="ShortTitle" name="ShortTitle" maxlength="10" placeholder="Short title" data-bind="value: selectedTask().shortTitle" tabindex="2" required />
+                            <span class="addon info-button" data-picky-help="taskShortTitle"><i class="icon-info-circle" title="More info" aria-hidden="true"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <textarea id="Description" name="Description" maxlength="200" placeholder="Description" data-bind="value: selectedTask().description" tabindex="3"></textarea>
+                    </li>
+                    <li>
+                        <div class="input-group">
+                            <span class="addon">Duration (minutes):</span>
+                            <input type="text" id="DurationMinutes" name="DurationMinutes" maxlength="3" data-bind="value: selectedTask().durationMinutes" tabindex="4" />
+                            <span class="addon info-button" data-picky-help="taskDuration"><i class="icon-info-circle" title="More info" aria-hidden="true"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-group">
+                            <span class="addon">Repetitions:</span>
+                            <input type="text" id="Repetitions" name="Repetitions" maxlength="3" data-bind="value: selectedTask().repetitions" tabindex="5" />
+                            <span class="addon info-button" data-picky-help="taskRepetitions"><i class="icon-info-circle" title="More info" aria-hidden="true"></i></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input-group">
+                            <span class="addon">Theme:</span>
+                            <select id="Theme" name="Theme" data-bind="value: selectedTask().theme, options: taskThemeSelectOptions, optionsText: 'text', optionsValue: 'value'" tabindex="6" required></select>
+                            <span class="addon theme-example" data-bind="css: selectedTask().themeName"><i class="icon-paint-brush" aria-hidden="true"></i></span>
+                            <span class="addon info-button" data-picky-help="taskTheme"><i class="icon-info-circle" title="More info" aria-hidden="true"></i></span>
+                        </div>
+                    </li>
+                </ol>
+                <div class="submit-wrap">
+                    <input type="submit" class="button" value="Save" tabindex="7" />
+                    <button type="button" class="button" data-bind="click: hideForm" tabindex="8">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col span_4">&nbsp;</div>
+</section>
+
+<section class="row">
+    <div class="col span_2">&nbsp;</div>
+    <div class="col span_8">
+        <div class="table-title" data-bind="text: tableTitle">Active tasks</div>
+
+        <div class="table-top-actions">
+            <button type="button" id="new-task" class="button" data-bind="click: newTask"><i class="icon-plus-circle distanced" aria-hidden="true"></i>New</button>
+        </div>
+
+        <div class="table-responsive-wrap">
+            <table id="tasks-table" class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th><i class="icon-clock-o distanced" aria-hidden="true"></i>Duration</th>
+                        <th><i class="icon-repeat distanced" aria-hidden="true"></i>Repetitions</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="active-tasks" data-bind="foreach: activeTasks, visible: activeTasksAreVisible">
+                    <tr>
+                        <td class="reorder-column"><i class="icon-random sort-handle" title="Drag to reorder" aria-hidden="true"></i></td>
+                        <td data-bind="text: title"></td>
+                        <td data-bind="text: trimmedDescription"></td>
+                        <td data-bind="text: durationMinutes"></td>
+                        <td data-bind="text: repetitions"></td>
+                        <td>
+                            <button type="button" class="button" data-bind="click: $root.editTask">
+                                <i class="distanced" data-bind="css: { 'icon-pencil-square-o': $root.selectedTask().id() !== id(), 'icon-ban': $root.selectedTask().id() === id() }" aria-hidden="true"></i><span data-bind="text: $root.selectedTask().id() !== id() ? 'Edit' : 'Cancel'"></span>
+                            </button>
+                            <button type="button" class="button" data-bind="click: $root.archiveTask"><i class="icon-archive distanced" aria-hidden="true"></i>Archive</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody id="archived-tasks" data-bind="foreach: archivedTasks, visible: !activeTasksAreVisible()">
+                    <tr>
+                        <td colspan="2" data-bind="text: title"></td>
+                        <td data-bind="text: trimmedDescription"></td>
+                        <td data-bind="text: durationMinutes"></td>
+                        <td data-bind="text: repetitions"></td>
+                        <td>
+                            <button type="button" class="button" data-bind="click: $root.restoreTask"><i class="icon-undo distanced" aria-hidden="true"></i>Restore</button>
+                            <button type="button" class="button" data-bind="click: $root.deleteTask"><i class="icon-trash distanced" aria-hidden="true"></i>Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="empty-table" data-bind="visible: activeTasksAreVisible && activeTasks().length === 0 || !activeTasksAreVisible() && archivedTasks().length === 0">
+                    <tr>
+                        <td colspan="6">There doesn't seem to be anything here</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="table-bottom-actions">
+            <button type="button" class="button" data-bind="visible: activeTasksAreVisible && archivedTasks().length > 0, text: toggleActiveArchivedButtonText, click: toggleActiveArchived">Show archived</button>
+        </div>
+    </div>
+    <div class="col span_2">&nbsp;</div>
+</section>
+
+@section Scripts {
+    <script>
+            var taskThemeSelectOptions = JSON.parse('@Html.Raw(ViewBag.TaskThemeSelectOptions)');
+    </script>
+    <script src="@Url.Content("/Scripts/sortable.min.js")"></script>
+    <script src="@Url.Content("/JS/Tasks/index.js")"></script>
+}

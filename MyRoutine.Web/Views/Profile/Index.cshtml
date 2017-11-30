@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Profile";
+}
+
+<section id="form-wrap" class="row">
+    <div class="col span_4">&nbsp;</div>
+    <div class="col span_4">
+        <form id="change-profile-details-form" class="row initially-hidden" data-bind="visible: formIsShown, submit: submit">
+            <fieldset>
+                <legend class="small">Profile Details</legend>
+                <input type="hidden" id="OriginalEmail" name="OriginalEmail" data-bind="value: originalEmail" />
+                <ol>
+                    <li>
+                        <input type="text" id="Email" name="Email" maxlength="320" placeholder="Email" data-bind="value: email" required />
+                    </li>
+                    <li>
+                        <input type="text" id="Name" name="Name" maxlength="30" placeholder="Name" data-bind="value: name" required />
+                    </li>
+                    <li>
+                        <input type="password" id="Password" name="Password" maxlength="100" placeholder="Password" data-bind="value: password" required />
+                    </li>
+                </ol>
+                <div class="submit-wrap">
+                    <input type="submit" class="button" value="Save" />
+                    <button type="button" class="button" data-bind="click: hideForm">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+        
+        <form id="change-password-form" class="row initially-hidden" data-bind="visible: formIsShown, submit: submit">
+            <fieldset>
+                <legend class="small">Change Password</legend>
+                <ol>
+                    <li>
+                        <input type="password" id="OldPassword" name="OldPassword" maxlength="100" placeholder="Old password" data-bind="value: oldPassword" required />
+                    </li>
+                    <li>
+                        <input type="password" id="NewPassword" name="NewPassword" maxlength="100" placeholder="New password" data-bind="value: newPassword" required />
+                    </li>
+                    <li>
+                        <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm password" data-bind="value: confirmPassword" required />
+                    </li>
+                </ol>
+                <div class="submit-wrap">
+                    <input type="submit" class="button" value="Save" />
+                    <button type="button" class="button" data-bind="click: hideForm">Cancel</button>
+                </div>
+            </fieldset>
+        </form>
+        
+        <div id="delete-account-forms">
+            <form id="verify-before-deletion-form" class="row initially-hidden" data-bind="visible: verifyFormIsShown, submit: verify">
+                <fieldset>
+                    <legend class="small">Delete Account</legend>
+                    <ol>
+                        <li>
+                            <input type="password" id="DeleteConfirmPassword" name="DeleteConfirmPassword" maxlength="100" placeholder="Password" data-bind="value: deleteConfirmPassword" required />
+                        </li>
+                    </ol>
+                    <div class="submit-wrap" data-bind="visible: deleteAccountFormIsShown() === false">
+                        <input type="submit" class="button" title="Don't click this" value="Delete Account" />
+                        <button type="button" class="button" data-bind="click: hideForms">Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+
+            <form id="delete-account-form" class="row initially-hidden" data-bind="visible: deleteAccountFormIsShown, submit: submit">
+                <fieldset>
+                    <legend class="small">Why?</legend>
+                    <ol>
+                        <li>
+                            <select id="Reason" name="Reason" data-bind="value: reason">
+                                <option value="No reason">No reason</option>
+                                <option value="I no longer need My Routine">I no longer need My Routine</option>
+                                <option value="My Routine is impractical to use">My Routine is impractical to use</option>
+                                <option value="I hate Picky">I hate Picky</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </li>
+                        <li data-bind="visible: elaborationAndSuggestionsAreVisible">
+                            <textarea id="Elaboration" name="Elaboration" maxlength="1000" placeholder="Elaborate further if you wish" data-bind="value: elaboration"></textarea>
+                        </li>
+                        <li data-bind="visible: elaborationAndSuggestionsAreVisible">
+                            <textarea id="Suggestions" name="Suggestions" maxlength="3000" placeholder="Suggestions?" data-bind="value: suggestions"></textarea>
+                        </li>
+                    </ol>
+                    <div class="submit-wrap">
+                        <input type="submit" class="button" title="Nooooo" value="Confirm Account Deletion" />
+                        <button type="button" class="button" data-bind="click: hideForms">Cancel</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <div class="col span_4">&nbsp;</div>
+</section>
+
+<section class="row gutters" id="profile-details">
+    <div class="col span_12">
+        <div class="detail minutes" title="Completed minutes"><i class="icon-clock-o" aria-hidden="true"></i> <span data-bind="text: completedMinutesCount"></span></div>
+        <div class="detail" data-bind="text: changeProfileDetailsForm().name"></div>
+        <div class="detail" data-bind="text: changeProfileDetailsForm().email"></div>
+        <div class="detail"><span data-bind="text: activeTasksCount"></span> active <i class="icon-circle" aria-hidden="true"></i> <span data-bind="text: archivedTasksCount"></span> archived</div>
+        <div class="detail"><span data-bind="text: completedTasksCount"></span> completed items</div>
+        <br/>
+        <br/>
+        <div class="detail"><a href="javascript:;" data-bind="click: changeProfileDetailsForm().showForm">Change profile details</a></div>
+        <div class="detail"><a href="javascript:;" data-bind="click: changePasswordForm().showForm">Change password</a></div>
+        <div class="detail"><a href="javascript:;" data-bind="click: deleteAccountForm().showVerifyForm">Delete Account</a></div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="@Url.Content("/JS/Profile/index.js")"></script>
+}
