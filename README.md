@@ -4,7 +4,7 @@ A progress-tracking tool for people learning an instrument. Allows users to keep
 
 ## Demo
 
-You can see it in action [here](http://myroutine.davidtimovski.com/).
+You can no longer see it in action because I currently host all of my applications on a Linux VM and My Routine can only be hosted on a Windows server.
 
 ## License
 
